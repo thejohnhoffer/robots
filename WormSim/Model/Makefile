@@ -4,7 +4,7 @@ all: worm wormpy
 
 CC=g++
 CXX=$(CC) -O2 -fPIC -I ../sundials-2.3.0/src/ida -I ../sundials-2.3.0/include -I ../sundials-2.3.0/src -Wno-deprecated
-LIBS=-L /usr/local/lib -l sundials_ida -l sundials_cvode -l sundials_nvecserial -lm
+LIBS=-L /usr/local/lib -L ../Sundials/lib -l sundials_ida -l sundials_cvode -l python -l sundials_nvecserial -lm
 SRCS=$(shell ls *.cpp)
 OBJS=$(subst .cpp,.o,$(SRCS))
 
@@ -13,7 +13,7 @@ worm: $(OBJS)
 
 wormpy: $(OBJS) wormpy.i
 	swig -c++ -python wormpy.i
-	$(CC) -O2 -fPIC -c wormpy_wrap.cxx -I/home/tom/anaconda2/include/python2.7
+	$(CC) -O2 -fPIC -c wormpy_wrap.cxx -I/usr/include/python2.7
 	$(CXX) -shared $(OBJS) wormpy_wrap.o $(LIBS) -o _wormpy.so
 
 check:
